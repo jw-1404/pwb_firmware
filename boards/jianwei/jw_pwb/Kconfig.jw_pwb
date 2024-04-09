@@ -1,0 +1,3 @@
+
+config BOARD_JW_PWB
+	select SOC_STM32F051X8

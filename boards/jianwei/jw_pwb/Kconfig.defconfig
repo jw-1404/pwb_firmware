@@ -1,0 +1,7 @@
+
+if BOARD_JW_PWB
+
+config BOARD
+	default "jw_pwb"
+
+endif # BOARD_JW_PWB
