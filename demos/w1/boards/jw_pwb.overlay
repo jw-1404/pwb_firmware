@@ -1,0 +1,17 @@
+
+/{
+    w1: w1 {
+        compatible = "zephyr,w1-gpio";
+        // [todo] gpio pin
+        gpios = <&gpio0 13 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN | GPIO_PULL_UP)>;
+        status = "okay";
+
+		ds18b20 {
+			compatible = "maxim,ds18b20";
+            // [todo] family-code & resolution
+			family-code = <0x28>;
+			resolution = <12>;
+			status = "okay";
+		};
+    };
+};
