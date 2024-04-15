@@ -1,0 +1,19 @@
+# DS18S20 temperature and humidity sensor configuration options
+# - hard fork of zephyr's ds18b20 driver
+# - with
+#   - correct temperature conversion
+# - without
+#   - alarm bytes setting & reading
+#   -
+
+# Copyright (c) 2022 Thomas Stranger
+# Copyright (c) 2024 Yong Zhou
+# SPDX-License-Identifier: Apache-2.0
+
+config DS18S20
+	bool "DS18S20 Temperature Sensor"
+	default y
+	depends on DT_HAS_MAXIM_DS18S20_ENABLED
+	depends on W1_NET
+	help
+	  Enable driver for DS18S20 1-Wire temperature sensors.
