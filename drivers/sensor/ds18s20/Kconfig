@@ -2,9 +2,9 @@
 # - hard fork of zephyr's ds18b20 driver
 # - with
 #   - correct temperature conversion
+#   - rom id attributes getting & fetching
 # - without
 #   - alarm bytes setting & reading
-#   -
 
 # Copyright (c) 2022 Thomas Stranger
 # Copyright (c) 2024 Yong Zhou
