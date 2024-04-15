@@ -1,5 +1,4 @@
-#ifndef REGISTERS_H_
-#define REGISTERS_H_
+#pragma once
 
 /*** holding registers ***/
 
@@ -24,24 +23,32 @@
 
 // trip current settings (uA)
 #define REG_TRIP_CH1 12
-#define REG_TRIP_CH1 13
-#define REG_TRIP_CH1 14
-#define REG_TRIP_CH1 15
+#define REG_TRIP_CH2 13
+#define REG_TRIP_CH3 14
+#define REG_TRIP_CH4 15
 
 // ramp up/down settings (step in V)
 #define REG_RUP_STEP 16
 #define REG_RDN_STEP 17
 
+// status polling interval (in ms)
+#define REG_UPDATE_INTERVAL 18
+
+// system alive time (high-16 bits & low-16 bits)
+/// alive-time = polling-times * update_interval
+#define REG_ALIVE_HI 19
+#define REG_ALIVE_LW 20
+
 // others
-#define REG_BOARD_UUID 18
-#define REG_TEMPERATURE 19
-#define REG_HUMIDITY 20
+#define REG_BOARD_UUID 21
+#define REG_TEMPERATURE 22
+#define REG_HUMIDITY 23
 
 /// control command registers
-#define REG_CLR_TRIPS 21
-#define REG_RESET 22
+#define REG_CLR_TRIPS 24
+#define REG_RESET 25
 
-#define REG_END 23
+#define REG_END 26
 
 /*** coils ***/
 
@@ -60,5 +67,3 @@
 #define COIL_ONOFF_CH4 7
 
 #define COIL_END 8
-
-#endif // REGISTERS_H_

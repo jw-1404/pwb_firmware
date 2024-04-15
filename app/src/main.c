@@ -6,23 +6,67 @@
 // in ms
 #define STATUS_UPDATE_PERIOD 1000
 
+#define ALIVE_COUNTING_PERIOD 1000
+uint32_t alive_counts;
+
 ////// internal registers as well as external communication interfaces
 #include "registers.h"
 static uint16_t holding_reg[REG_END];
 static uint16_t coils_state; // max 16 coils, actual defined in registers.h
 
+////// internal status polling
+void status_work_handler(struct k_work *work) {
+  /* test */
+  if (coils_state & BIT(COIL_ONOFF_CH1)) {
+    coils_state &= ~BIT(COIL_ONOFF_CH1);
+  } else {
+    coils_state |= BIT(COIL_ONOFF_CH1);
+  }
+
+  /* 1. read present V & I */
+
+  /* 2. read present temepature & humidity */
+
+  /* 3. trip or not */
+  if (!(coils_state & BIT(COIL_TRIPPED_CH1))) {
+    // check trip condition & do trip
+  }
+}
+K_WORK_DEFINE(status_work, status_work_handler);
+
+static void status_timer_callback(struct k_timer *timer) {
+  /* submit to system work queue */
+  k_work_submit(&status_work);
+}
+
+static K_TIMER_DEFINE(status_timer, status_timer_callback, NULL);
+
+////// alive counts update
+static void alive_timer_callback(struct k_timer *timer) {
+  uint32_t _cv = ++alive_counts;
+  holding_reg[REG_ALIVE_LW] = _cv & BIT_MASK(16);
+  holding_reg[REG_ALIVE_HI] = _cv >> 16;
+}
+
+static K_TIMER_DEFINE(alive_timer, alive_timer_callback, NULL);
+
 ////// k_work to process coil/register commands
-typedef struct {
+struct ctrl_cmd_t {
   struct k_work work;
   uint8_t addr;
-} control_cmd;
+};
 
-static struct k_work coil_work;
-static control_cmd coil_cmd = {.work = coil_work, .addr = COIL_END};
+static struct ctrl_cmd_t coil_cmd = {.addr = COIL_END};
 void coil_work_handler(struct k_work *item) {
-  struct control_cmd *the_cmd = CONTAINER_OF(item, struct control_cmd, work);
+  struct ctrl_cmd_t *the_cmd = CONTAINER_OF(item, struct ctrl_cmd_t, work);
   switch (the_cmd->addr) {
-  case COIL_ONOFF_CH1:
+  case COIL_ONOFF_CH2:
+    /* test */
+    if (coils_state & BIT(COIL_ONOFF_CH2)) {
+      holding_reg[REG_PVV_CH2] = 111;
+    } else {
+      holding_reg[REG_PVV_CH2] = 0;
+    }
     // check the coil state
     // on: send vpv to dac
     // off: send 0 to dac
@@ -34,15 +78,19 @@ void coil_work_handler(struct k_work *item) {
   return;
 }
 
-static struct k_work register_work;
-static struct k_work register_cmd = {.work = register_work, .addr = REG_END};
-void register_work_handler(struct k_work *work) {
-  struct control_cmd *the_cmd = CONTAINER_OF(item, struct control_cmd, work);
+static struct ctrl_cmd_t register_cmd = {.addr = REG_END};
+void register_work_handler(struct k_work *item) {
+  struct ctrl_cmd_t *the_cmd = CONTAINER_OF(item, struct ctrl_cmd_t, work);
   switch (the_cmd->addr) {
-  case REG_RESET:
+  case REG_SVV_CH3:
+    /* test */
+    holding_reg[REG_PVV_CH3] = 333;
     // check the coil state
     printk("reset the boards");
     break;
+  case REG_UPDATE_INTERVAL:
+    k_timer_start(&status_timer, K_NO_WAIT,
+                  K_MSEC(holding_reg[REG_UPDATE_INTERVAL]));
   default:
     printk("unsupported");
   }
@@ -102,6 +150,12 @@ static int holding_reg_wr(uint16_t addr, uint16_t reg) {
     return -ENOTSUP;
   }
 
+  // cmds without effects, just return
+  if ((addr == REG_UPDATE_INTERVAL) && (reg == holding_reg[addr])) {
+    return 0;
+  }
+
+  //
   holding_reg[addr] = reg;
 
   register_cmd.addr = addr;
@@ -149,28 +203,12 @@ static int init_modbus_server(void) {
   return modbus_init_server(iface, server_param);
 }
 
-////// internal status polling
-void status_work_handler(struct k_work *work) {
-  /* 1. read present V & I */
-
-  /* 2. read present temepature & humidity */
-
-  /* 3. trip or not */
-  if (!(coils_state & BIT(COIL_TRIPPED_CH1))) {
-    // check trip condition & do trip
-  }
-}
-K_WORK_DEFINE(status_work, status_work_handler);
-
-static void status_timer_callback(struct k_timer *timer) {
-  k_work_submit(&status_work);
-}
-
-static K_TIMER_DEFINE(status_timer, status_timer_callback, NULL);
-
 ///////// main thread
 int main(void) {
-  /* internal registers init */
+  /* [todo] internal registers init */
+  alive_counts=0;
+  holding_reg[REG_UPDATE_INTERVAL] = STATUS_UPDATE_PERIOD;
+
   coils_state = 0x0000;
   for (int i = 0; i < REG_END; i++) {
     holding_reg[i] = i + 1;
@@ -186,7 +224,11 @@ int main(void) {
   }
 
   /* status polling loop init */
-  k_timer_start(&status_timer, 0, K_MSEC(STATUS_UPDATE_PERIOD));
+  k_timer_start(&status_timer, K_NO_WAIT,
+                K_MSEC(holding_reg[REG_UPDATE_INTERVAL]));
+
+  /* alive counting init */
+  k_timer_start(&status_timer, K_NO_WAIT, K_MSEC(ALIVE_COUNTING_PERIOD));
 
   return 0;
 }
