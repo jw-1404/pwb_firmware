@@ -1,3 +1,16 @@
+/{
+  w1: w1 {
+    compatible = "zephyr,w1-gpio";
+    gpios = <&gpiob 5 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN | GPIO_PULL_UP)>;
+    status = "okay";
+
+    ds18s20: ds18s20 {
+      compatible = "maxim,ds18s20";
+	    family-code = <0x10>;
+	    status = "okay";
+    };
+  };
+};
 
 &usart1 {
 	status = "okay";

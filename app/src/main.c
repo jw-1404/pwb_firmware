@@ -7,12 +7,12 @@
 #define STATUS_UPDATE_PERIOD 1000
 
 #define ALIVE_COUNTING_PERIOD 1000
-uint32_t alive_counts;
+static uint32_t alive_counts;
 
 ////// internal registers as well as external communication interfaces
 #include "registers.h"
-static uint16_t holding_reg[REG_END];
-static uint16_t coils_state; // max 16 coils, actual defined in registers.h
+uint16_t holding_reg[REG_END];
+uint16_t coils_state; // max 16 coils, actual defined in registers.h
 
 ////// internal status polling
 void status_work_handler(struct k_work *work) {
@@ -210,9 +210,6 @@ int main(void) {
   holding_reg[REG_UPDATE_INTERVAL] = STATUS_UPDATE_PERIOD;
 
   coils_state = 0x0000;
-  for (int i = 0; i < REG_END; i++) {
-    holding_reg[i] = i + 1;
-  }
 
   /* work init */
   k_work_init(&coil_cmd.work, coil_work_handler);

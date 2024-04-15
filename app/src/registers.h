@@ -40,15 +40,16 @@
 #define REG_ALIVE_LW 20
 
 // others
-#define REG_BOARD_UUID 21
-#define REG_TEMPERATURE 22
-#define REG_HUMIDITY 23
+#define REG_TEMPERATURE 21
+#define REG_HUMIDITY 22
+// 64-bit uuid, addr range (little endian): 23-26
+#define REG_BOARD_UUID 23
 
 /// control command registers
-#define REG_CLR_TRIPS 24
-#define REG_RESET 25
+#define REG_CLR_TRIPS 27
+#define REG_RESET 28
 
-#define REG_END 26
+#define REG_END 29
 
 /*** coils ***/
 
