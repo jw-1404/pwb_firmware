@@ -1,3 +1,5 @@
+#include "common.h"
+#include <zephyr/drivers/sensor.h>
 #include <zephyr/kernel.h>
 #include <zephyr/modbus/modbus.h>
 #include <zephyr/sys/printk.h>
@@ -10,9 +12,12 @@
 static uint32_t alive_counts;
 
 ////// internal registers as well as external communication interfaces
-#include "registers.h"
+/* #include "registers.h" */
 uint16_t holding_reg[REG_END];
 uint16_t coils_state; // max 16 coils, actual defined in registers.h
+
+////// [todo] peripheral nodes
+static const struct device *dev_sht3xa;;
 
 ////// internal status polling
 void status_work_handler(struct k_work *work) {
@@ -26,12 +31,21 @@ void status_work_handler(struct k_work *work) {
   /* 1. read present V & I */
 
   /* 2. read present temepature & humidity */
+  struct sensor_value temp, hum;
+  sensor_sample_fetch(dev_sht3xa);
+  sensor_channel_get(dev_sht3xa, SENSOR_CHAN_AMBIENT_TEMP, &temp);
+  sensor_channel_get(dev_sht3xa, SENSOR_CHAN_HUMIDITY, &hum);
+  holding_reg[REG_TEMPERATURE_INT] = temp.val1 & BIT_MASK(16);
+  holding_reg[REG_TEMPERATURE_FLT] = temp.val2 & BIT_MASK(16); // = flt/1000000
+  holding_reg[REG_HUMIDITY_INT] = hum.val1 & BIT_MASK(16);
+  holding_reg[REG_HUMIDITY_FLT] = hum.val2 & BIT_MASK(16); // = flt/1000000
 
   /* 3. trip or not */
   if (!(coils_state & BIT(COIL_TRIPPED_CH1))) {
     // check trip condition & do trip
   }
 }
+
 K_WORK_DEFINE(status_work, status_work_handler);
 
 static void status_timer_callback(struct k_timer *timer) {
@@ -210,6 +224,15 @@ int main(void) {
   holding_reg[REG_UPDATE_INTERVAL] = STATUS_UPDATE_PERIOD;
 
   coils_state = 0x0000;
+
+  /* peripheral device init (not real init, just fetch existing devices already initialized) */
+  dev_sht3xa = DEVICE_DT_GET(SHT3XA_NODE);
+  if (!device_is_ready(dev_sht3xa)) {
+    printk("\nError: Device \"%s\" is not ready; "
+           "check the driver initialization logs for errors.\n",
+           dev_sht3xa->name);
+    return -ENOENT;
+  }
 
   /* work init */
   k_work_init(&coil_cmd.work, coil_work_handler);

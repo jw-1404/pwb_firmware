@@ -1,3 +1,5 @@
+#ifdef CONFIG_DS18S20
+
 #include "common.h"
 #include <zephyr/device.h>
 #include <zephyr/devicetree.h>
@@ -7,7 +9,7 @@
 #include <zephyr/sys/util.h>
 
 static int ds18s20_init(void) {
-  const struct device *const dev = DEVICE_DT_GET_ANY(maxim_ds18s20);
+  const struct device *const dev = DEVICE_DT_GET(DS18S20_NODE);
 
   if (dev == NULL) {
     /* No such node, or the node does not have status "okay". */
@@ -36,3 +38,5 @@ static int ds18s20_init(void) {
 }
 
 SYS_INIT(ds18s20_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+
+#endif
