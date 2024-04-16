@@ -5,17 +5,15 @@
 #include <zephyr/devicetree.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/drivers/sensor/w1_sensor.h>
-#include <zephyr/kernel.h>
 #include <zephyr/sys/util.h>
 
-static int ds18s20_init(void) {
-  const struct device *const dev = DEVICE_DT_GET(DS18S20_NODE);
+#define DS18S20_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(maxim_ds18s20)
+static const struct device *dev;
 
-  if (dev == NULL) {
-    /* No such node, or the node does not have status "okay". */
-    printk("\nError: no device found.\n");
-    return -ENOENT;
-  }
+//
+static int ds18s20_init(void) {
+
+  dev = DEVICE_DT_GET(DS18S20_NODE);
 
   if (!device_is_ready(dev)) {
     printk("\nError: Device \"%s\" is not ready; "
@@ -27,10 +25,10 @@ static int ds18s20_init(void) {
   struct sensor_value rom_id;
   sensor_attr_get(dev, SENSOR_CHAN_MAX, SENSOR_ATTR_W1_ROM, &rom_id);
 
-  holding_reg[REG_BOARD_UUID+3]= rom_id.val1 & BIT_MASK(16);
-  holding_reg[REG_BOARD_UUID+2] = (rom_id.val1 >> 16) & BIT_MASK(16);
-  holding_reg[REG_BOARD_UUID+1] = rom_id.val2 & BIT_MASK(16);
-  holding_reg[REG_BOARD_UUID] = (rom_id.val2 >> 16) & BIT_MASK(16);
+  holding_reg[REG_BOARD_UUID+3]->value = rom_id.val1 & BIT_MASK(16);
+  holding_reg[REG_BOARD_UUID+2]->value = (rom_id.val1 >> 16) & BIT_MASK(16);
+  holding_reg[REG_BOARD_UUID+1]->value = rom_id.val2 & BIT_MASK(16);
+  holding_reg[REG_BOARD_UUID]->value = (rom_id.val2 >> 16) & BIT_MASK(16);
 
   printk("UUID (ROM id): %08x %08x\n", rom_id.val2, rom_id.val1);
 

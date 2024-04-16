@@ -36,8 +36,8 @@
 
 // system alive time (high-16 bits & low-16 bits)
 /// alive-time = polling-times * update_interval
-#define REG_ALIVE_HI 19
-#define REG_ALIVE_LW 20
+#define REG_ALIVE_LW 19
+#define REG_ALIVE_HI 20
 
 // others
 #define REG_TEMPERATURE_INT 21
