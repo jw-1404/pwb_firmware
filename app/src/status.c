@@ -8,14 +8,10 @@
 static void status_work_handler(struct k_work *work) {
   POLL_HANDLER_FOREACH(handler) { handler->callback(); }
 
-  /* test */
-  coil_reg[COIL_ONOFF_CH1]->value = !coil_reg[COIL_ONOFF_CH1]->value;
-
   /* 1. read present V & I */
 
-  /* 2. read present temepature & humidity */
-
   /* 3. trip or not */
+
   return;
 }
 

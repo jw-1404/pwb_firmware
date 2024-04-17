@@ -52,10 +52,10 @@ static int coil_wr(uint16_t addr, bool state) {
     return -ENOTSUP;
   }
 
-  // [todo] cmds without effects, just return
-  /* if ((addr == REG_UPDATE_INTERVAL) && (reg == holding_reg[addr]->value)) { */
-  /*   return 0; */
-  /* } */
+  // cmds without effects, just return
+  if (state == coil_reg[addr]->value) {
+    return 0;
+  }
 
   //
   coil_reg[addr]->value=state;

@@ -10,7 +10,7 @@
 static const struct device *dev;
 
 /* status polling handler */
-void sht3xa_poll()
+static void sht3xa_poll()
 {
   struct sensor_value temp, hum;
   sensor_sample_fetch(dev);
