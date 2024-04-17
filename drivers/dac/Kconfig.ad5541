@@ -1,0 +1,22 @@
+
+config DAC_AD5541
+	bool "Analog Devices AD5541 DAC driver"
+	default y
+	select SPI
+	depends on DT_HAS_ADI_AD5541_ENABLED
+  help
+    Enable the driver for the Analog Devices AD5541 DAC
+
+if DAC_AD5541
+
+config DAC_AD5541_INIT_PRIORITY
+	int "Init priority"
+	default 80
+	help
+    It's initialized after SPI controller (default: 70)
+
+config DAC_AD5541_CS_DELAY
+  int "Delay (us) in CS holding before and after transmission"
+  default 10
+
+endif # DAC_AD5541

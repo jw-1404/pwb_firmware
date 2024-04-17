@@ -1,0 +1,15 @@
+&volt_ch0 {
+      status = "okay";
+};
+
+&volt_ch1 {
+      status = "okay";
+};
+
+&volt_ch2 {
+      status = "okay";
+};
+
+&volt_ch3 {
+      status = "okay";
+};

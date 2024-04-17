@@ -1,0 +1,5 @@
+if DAC
+
+rsource "Kconfig.ad5541"
+
+endif # DAC
