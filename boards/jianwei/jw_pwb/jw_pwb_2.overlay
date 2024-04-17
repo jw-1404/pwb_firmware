@@ -18,3 +18,85 @@
 		};
 	};
 };
+
+/{
+	spibb0: spibb0 {
+		compatible = "zephyr,spi-bitbang";
+		status = "okay";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		clk-gpios = <&gpioa 13 GPIO_ACTIVE_HIGH>;
+		mosi-gpios = <&gpioa 5 GPIO_ACTIVE_HIGH>;
+		cs-gpios = <&gpioa 0 GPIO_ACTIVE_LOW>;
+
+    volt_ch0: dac0@0{
+      compatible = "adi,ad5541";
+      // status = "okay";
+		  reg = <0x0>;
+
+			spi-max-frequency = <25000000>; // max: 25 MHz
+      duplex = <2048>; // half-duplex
+    };
+	};
+
+	spibb1: spibb1 {
+		compatible = "zephyr,spi-bitbang";
+		status = "okay";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		clk-gpios = <&gpioa 13 GPIO_ACTIVE_HIGH>;
+		mosi-gpios = <&gpioa 4 GPIO_ACTIVE_HIGH>;
+		cs-gpios = <&gpioa 3 GPIO_ACTIVE_LOW>;
+
+    volt_ch1: dac1@0{
+      compatible = "adi,ad5541";
+      // status = "okay";
+		  reg = <0x0>;
+
+			spi-max-frequency = <25000000>; // max: 25 MHz
+      duplex = <2048>; // half-duplex
+    };
+	};
+
+	spibb2: spibb2 {
+		compatible = "zephyr,spi-bitbang";
+		status = "okay";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		clk-gpios = <&gpioa 13 GPIO_ACTIVE_HIGH>;
+		mosi-gpios = <&gpioa 6 GPIO_ACTIVE_HIGH>;
+		cs-gpios = <&gpiob 1 GPIO_ACTIVE_LOW>;
+
+    volt_ch2: dac2@0{
+      compatible = "adi,ad5541";
+      // status = "okay";
+		  reg = <0x0>;
+
+			spi-max-frequency = <25000000>; // max: 25 MHz
+      duplex = <2048>; // half-duplex
+    };
+	};
+
+	spibb3: spibb3 {
+		compatible = "zephyr,spi-bitbang";
+		status = "okay";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		clk-gpios = <&gpioa 13 GPIO_ACTIVE_HIGH>;
+		mosi-gpios = <&gpioa 15 GPIO_ACTIVE_HIGH>;
+		cs-gpios = <&gpioa 14 GPIO_ACTIVE_LOW>;
+
+    volt_ch3: dac3@0{
+      compatible = "adi,ad5541";
+      // status = "okay";
+		  reg = <0x0>;
+
+			spi-max-frequency = <25000000>; // max: 25 MHz
+      duplex = <2048>; // half-duplex
+    };
+	};
+};

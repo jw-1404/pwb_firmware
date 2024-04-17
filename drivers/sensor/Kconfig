@@ -1,6 +1,5 @@
 if SENSOR
 
-rsource "example_sensor/Kconfig"
 rsource "ds18s20/Kconfig"
 
 endif # SENSOR
