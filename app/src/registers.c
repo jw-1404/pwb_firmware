@@ -7,6 +7,7 @@ LISTIFY(REG_END, HOLDING_REG_DEFINE, (;) , 0);
 LISTIFY(COIL_END, COIL_REG_DEFINE, (;), false);
 
 /* these global pointers as stubs to internal registers */
+// [todo] ugly, define a macro for in-place fetching as needed (see zephyr's device.h impl)
 struct holding_register_t *holding_reg[REG_END];
 struct coil_register_t *coil_reg[COIL_END];
 
