@@ -1,3 +1,4 @@
+# zephyr_syscall_header(${ZEPHYR_BASE}/include/zephyr/drivers/dac.h)
 
 zephyr_library()
 

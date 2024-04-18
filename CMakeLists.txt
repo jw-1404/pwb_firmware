@@ -12,6 +12,7 @@ set(SYSCALL_INCLUDE_DIRS ${SYSCALL_INCLUDE_DIRS} PARENT_SCOPE)
 
 zephyr_include_directories(include)
 zephyr_linker_sources(DATA_SECTIONS include/iterables/iterables_ram.ld)
-
 add_subdirectory(drivers)
+
+# [todo]
 add_subdirectory(lib)

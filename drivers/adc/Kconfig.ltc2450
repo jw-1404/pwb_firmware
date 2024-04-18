@@ -1,0 +1,21 @@
+config ADC_LTC2450
+	bool "Linear Technology ltc2450-1 ADC driver"
+	default y
+	select SPI
+	depends on DT_HAS_LLTC_LTC2450_ENABLED
+  help
+    Enable the driver for the ltc2450-1 ADC
+
+if ADC_LTC2450
+
+config ADC_LTC2450_INIT_PRIORITY
+	int "Init priority"
+	default 80
+	help
+    It's initialized after SPI controller (default: 70)
+
+config ADC_LTC2450_CONVERSION_MS
+  int "Wait time (in ms) for ltc2450 conversion job, 21 ms at least"
+  default 50
+
+endif # ADC_LTC2450

@@ -6,5 +6,6 @@ menu "Drivers"
 rsource "blink/Kconfig"
 rsource "sensor/Kconfig"
 rsource "dac/Kconfig"
+rsource "adc/Kconfig"
 
 endmenu

@@ -1,0 +1,17 @@
+&spi1 {
+  status = "okay";
+
+	clock-frequency = <1000000>;
+  cs-gpios = <&gpioa 8 GPIO_ACTIVE_LOW>; 
+
+  adc_ltc2450: ltc2450@0 {
+    compatible = "lltc,ltc2450";
+    reg = <0>;
+    status = "okay";
+
+		spi-max-frequency = <2000000>; // max: 2 MHz
+    duplex = <2048>; // half-duplex
+    // spi-cpol;  // clock idle low if disabled; otherwise high
+    // spi-cpha;  // read data on the rising edge if disabled; otherwise falling edge
+  };
+};

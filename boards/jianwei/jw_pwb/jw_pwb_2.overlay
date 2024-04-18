@@ -19,6 +19,18 @@
 	};
 };
 
+&i2c1 {
+	pinctrl-0 = <&i2c1_scl_pb6 &i2c1_sda_pb7>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&spi1 {
+	pinctrl-0 = <&spi1_sck_pb3 &spi1_miso_pb4>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
 /{
 	spibb0: spibb0 {
 		compatible = "zephyr,spi-bitbang";
