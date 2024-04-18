@@ -1,0 +1,22 @@
+
+description: |
+  A generic binding for a GPIO-controlled encoder (i.e. multiplexer like tmux1108).
+  It does not target a specific device or vender.
+
+  Example definition for a 8:1 encoder with 3 address lines:
+
+    gpio-encoder-example {
+        compatible = "gpio-encoder";
+        gpios = <&gpioa 4 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
+                <&gpioa 5 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
+                <&gpiob 8 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
+    };
+
+compatible: "gpio-encoder"
+
+properties:
+  gpios:
+    type: phandle-array
+    required: true
+    description: |
+      The array of GPIO pins acting as input pins of the encoder
