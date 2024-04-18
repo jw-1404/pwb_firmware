@@ -47,11 +47,14 @@
 // 64-bit uuid, addr range (little endian): 25-28
 #define REG_BOARD_UUID 25
 
-/// control command registers
+// control command registers
 #define REG_CLR_TRIPS 29
 #define REG_RESET 30
 
-#define REG_END 31
+// V and I measurment interval (better shorter than REG_UPDATE_INTERVAL)
+#define REG_MEASURE_INTERVAL 31
+
+#define REG_END 32
 
 /*** coils ***/
 

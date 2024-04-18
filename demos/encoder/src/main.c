@@ -43,9 +43,9 @@ int main(void) {
 
   /* printk("Setting pin to active level.\n"); */
 
-  /* err = gpio_pin_set_dt(&mux_a0, 1); */
+  /* err = gpio_pin_set_dt(&mux_a1, 1); */
   /* err = gpio_pin_configure_dt(&mux_a1, GPIO_OUTPUT_ACTIVE); */
-  err = gpio_pin_configure_dt(&mux_a2, GPIO_OUTPUT_ACTIVE);
+  err = gpio_pin_configure_dt(&mux_a1, GPIO_OUTPUT_ACTIVE);
   if (err != 0) {
     printk("Setting GPIO pin level failed: %d\n", err);
   }
