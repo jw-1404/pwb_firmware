@@ -17,6 +17,6 @@ config DAC_AD5541_INIT_PRIORITY
 
 config DAC_AD5541_CS_DELAY
   int "Delay (us) in CS holding before and after transmission"
-  default 10
+  default 1
 
 endif # DAC_AD5541
