@@ -1,10 +1,51 @@
-/{
+/dts-v1/;
+#include <st/f0/stm32f051X8.dtsi>
+#include <st/f0/stm32f051k8tx-pinctrl.dtsi>
+
+/ {
+	model = "JianWei Power Supply Board (stm32f051)";
+	compatible = "jw,pwb-stm32f051";
+
 	chosen {
+		zephyr,console = &usart1;
+		zephyr,shell-uart = &usart1;
+		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 		zephyr,code-partition = &code_partition;
 	};
+
+	aliases {
+		watchdog0 = &iwdg;
+	};
 };
 
+/* clocks */
+/* Note: max sysclk allowed is 48MHz */
+
+&clk_lsi {
+	status = "okay";
+};
+
+&clk_hse {
+	clock-frequency = <DT_FREQ_M(24)>;
+	status = "okay";
+};
+
+&pll {
+	prediv = <1>;
+	mul = <2>;
+	clocks = <&clk_hse>;
+	status = "okay";
+};
+
+&rcc {
+	clocks = <&pll>;
+	clock-frequency = <DT_FREQ_M(48)>;
+	ahb-prescaler = <1>;
+	apb1-prescaler = <1>;
+};
+
+/* flash */
 &flash0 {
 	partitions {
 		compatible = "fixed-partitions";
@@ -19,6 +60,17 @@
 	};
 };
 
+/* watchdog */
+&iwdg {
+	status = "okay";
+};
+
+/* peripherals */
+
+/* Due to limited available memory, don't enable gpiod and gpiof */
+&gpiod {status = "disabled";};
+&gpiof {status = "disabled";};
+
 &i2c1 {
 	pinctrl-0 = <&i2c1_scl_pb6 &i2c1_sda_pb7>;
 	pinctrl-names = "default";
@@ -31,6 +83,14 @@
 	status = "okay";
 };
 
+&usart1 {
+	pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+
+/* spi-bitbang */
 /{
 	spibb0: spibb0 {
 		compatible = "zephyr,spi-bitbang";

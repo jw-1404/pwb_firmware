@@ -1,0 +1,16 @@
+
+# Serial Drivers
+CONFIG_SERIAL=y
+
+# disable uart console, can't be shared with modbus
+CONFIG_CONSOLE=n
+CONFIG_UART_CONSOLE=n
+
+# GPIO Controller
+CONFIG_GPIO=y
+
+# Enable Clocks
+CONFIG_CLOCK_CONTROL=y
+
+# enable pin controller
+CONFIG_PINCTRL=y

@@ -1,0 +1,15 @@
+identifier: jw_pwb_stm32f051x8
+name: JianWei Power Supply Board (stm32f051x8)
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - xtools
+ram: 8
+flash: 64
+supported:
+  - gpio
+  - spi
+  - i2c
+  - usart
+vendor: st

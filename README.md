@@ -1,5 +1,9 @@
 # Firmware of JianWei Power-supply Board
 
+## versions
+- PCB-v2 uses SoC stm32f051x8
+- PCB-v3 uses SoC stm32f103xb
+
 ## initialization
 
 ```shell
@@ -9,7 +13,11 @@ west update
 ```
 
 ## build
-`west build -p -b jw_pwb -d build pwb_firmware.git/app`
+For PCB-v2:
+`west build -p -b jw_pwb/stm32f051x8 -d build pwb_firmware.git/app`
+
+For PCB-v3:
+`west build -p -b jw_pwb/stm32f103xb -d build pwb_firmware.git/app`
 
 ## flashing (linux)
 
