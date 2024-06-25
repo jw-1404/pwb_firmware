@@ -1,14 +1,14 @@
 /dts-v1/;
+
 #include <st/f0/stm32f051X8.dtsi>
 #include <st/f0/stm32f051k8tx-pinctrl.dtsi>
+#include "jw_pwb_common.dtsi"
 
 / {
 	model = "JianWei Power Supply Board (stm32f051)";
 	compatible = "jw,pwb-stm32f051";
 
 	chosen {
-		zephyr,console = &usart1;
-		zephyr,shell-uart = &usart1;
 		zephyr,sram = &sram0;
 		zephyr,flash = &flash0;
 		zephyr,code-partition = &code_partition;
@@ -19,8 +19,7 @@
 	};
 };
 
-/* clocks */
-/* Note: max sysclk allowed is 48MHz */
+/* clocks: max cpu frq is 48MHz */
 
 &clk_lsi {
 	status = "okay";
@@ -65,32 +64,56 @@
 	status = "okay";
 };
 
-/* peripherals */
-
-/* Due to limited available memory, don't enable gpiod and gpiof */
+/* due to limited available memory, don't enable gpiod and gpiof */
 &gpiod {status = "disabled";};
 &gpiof {status = "disabled";};
 
-&i2c1 {
-	pinctrl-0 = <&i2c1_scl_pb6 &i2c1_sda_pb7>;
-	pinctrl-names = "default";
-	status = "okay";
-};
 
-&spi1 {
-	pinctrl-0 = <&spi1_sck_pb3 &spi1_miso_pb4>;
-	pinctrl-names = "default";
-	status = "okay";
-};
+/* communication: */
 
+/* - uart for modbus (note: the same port is used to programmming by jumper selection) */
 &usart1 {
 	pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10>;
 	pinctrl-names = "default";
 	status = "okay";
+
+	modbus0 {
+		compatible = "zephyr,modbus-serial";
+		status = "okay";
+
+		de-gpios = <&gpioa 1 GPIO_ACTIVE_HIGH>;
+	};
 };
 
+/* peripherals: */
 
-/* spi-bitbang */
+/* - ch encoder for adc measurmeant */
+&adc_encoder {
+  gpios = <&gpioa 2  (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
+          <&gpioa 12 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
+          <&gpioa 11 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
+  status = "okay";
+};
+
+/* - adc for V/I measuremet */
+&spi1 {
+	pinctrl-0 = <&spi1_sck_pb3 &spi1_miso_pb4>;
+	pinctrl-names = "default";
+	clock-frequency = <1500000>; // limit it to 1.5 MHz (24 MHz/16)
+  status = "okay";
+
+  cs-gpios = <&gpioa 8 GPIO_ACTIVE_LOW>; 
+  ltc2450@0 {
+    compatible = "lltc,ltc2450";
+    reg = <0>;
+    status = "okay";
+
+		spi-max-frequency = <2000000>; // max: 2 MHz
+    duplex = <2048>; // half-duplex
+  };
+};
+
+/* - dac for V set (spi-bitbang) */
 /{
 	spibb0: spibb0 {
 		compatible = "zephyr,spi-bitbang";
@@ -104,7 +127,7 @@
 
     volt_ch0: dac0@0{
       compatible = "adi,ad5541";
-      // status = "okay";
+      status = "okay";
 		  reg = <0x0>;
 
 			spi-max-frequency = <25000000>; // max: 25 MHz
@@ -124,7 +147,7 @@
 
     volt_ch1: dac1@0{
       compatible = "adi,ad5541";
-      // status = "okay";
+      status = "okay";
 		  reg = <0x0>;
 
 			spi-max-frequency = <25000000>; // max: 25 MHz
@@ -144,7 +167,7 @@
 
     volt_ch2: dac2@0{
       compatible = "adi,ad5541";
-      // status = "okay";
+      status = "okay";
 		  reg = <0x0>;
 
 			spi-max-frequency = <25000000>; // max: 25 MHz
@@ -164,11 +187,32 @@
 
     volt_ch3: dac3@0{
       compatible = "adi,ad5541";
-      // status = "okay";
+      status = "okay";
 		  reg = <0x0>;
 
 			spi-max-frequency = <25000000>; // max: 25 MHz
       duplex = <2048>; // half-duplex
     };
+	};
+};
+
+/* - w1 for uuid */
+&w1_bus {
+  gpios = <&gpiob 5 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN | GPIO_PULL_UP)>;
+  status = "okay";
+};
+
+/* - sensor for temperature */
+&i2c1 {
+	pinctrl-0 = <&i2c1_scl_pb6 &i2c1_sda_pb7>;
+	pinctrl-names = "default";
+	status = "okay";
+
+	sht3xd@44 {
+		compatible = "sensirion,sht3xd";
+		reg= <0x44>;
+    status = "okay";
+
+		alert-gpios = <&gpioa 7 GPIO_ACTIVE_HIGH>;
 	};
 };

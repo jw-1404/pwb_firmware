@@ -15,19 +15,22 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/kernel.h>
 
+#define ADC_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(lltc_ltc2450)
+#define ENCODER_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(gpio_encoder)
+
 /* should be more frequent than other peripheral's status update */
 #define MEASUREMENT_PERIOD 500
 
-/* mapping from encoder ch to internal register */
+/* hardcoded mapping from encoder ch to internal register addr (fixed in PCB design) */
 const static uint16_t measure_ch_map[] = {REG_PVV_CH1, REG_PVI_CH1, REG_PVI_CH0,
                                           REG_PVV_CH0, REG_PVI_CH2, REG_PVV_CH2,
                                           REG_PVV_CH3, REG_PVI_CH3};
 
 /* set the current adc channel */
 const static struct gpio_dt_spec encoder_gpio[] = {
-    GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(adc_encoder), gpios, 0),
-    GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(adc_encoder), gpios, 1),
-    GPIO_DT_SPEC_GET_BY_IDX(DT_NODELABEL(adc_encoder), gpios, 2)};
+    GPIO_DT_SPEC_GET_BY_IDX(ENCODER_NODE, gpios, 0),
+    GPIO_DT_SPEC_GET_BY_IDX(ENCODER_NODE, gpios, 1),
+    GPIO_DT_SPEC_GET_BY_IDX(ENCODER_NODE, gpios, 2)};
 
 #define SET_ENCODER_ADDR(index, ch)                                            \
   gpio_pin_configure_dt(encoder_gpio + index, (ch >> index) & BIT_MASK(1)            \
@@ -41,7 +44,7 @@ inline static void choose_adc_ch(uint8_t ch) {
 }
 
 /* read one channel's current measurement */
-const static struct device *adc_dev = DEVICE_DT_GET(DT_NODELABEL(adc_ltc2450));
+const static struct device *adc_dev = DEVICE_DT_GET(ADC_NODE);
 
 // [todo] rtn err code?
 inline static void read_adc_ch(int ch) {

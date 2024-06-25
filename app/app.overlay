@@ -1,83 +1,10 @@
-/{
-  w1: w1 {
-    compatible = "zephyr,w1-gpio";
-    gpios = <&gpiob 5 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN | GPIO_PULL_UP)>;
-    status = "okay";
+// /{
+// 	chosen {
+// 		zephyr,console = &usart3;
+// 		zephyr,shell-uart = &usart3;
+//   };
+// };
 
-    ds18s20: ds18s20 {
-      compatible = "maxim,ds18s20";
-	    family-code = <0x10>;
-
-	    status = "okay";
-    };
-  };
-
-
-};
-
-&usart1 {
-	status = "okay";
-
-	modbus0 {
-		compatible = "zephyr,modbus-serial";
-		status = "okay";
-
-		de-gpios = <&gpioa 1 GPIO_ACTIVE_HIGH>;
-	};
-};
-
-&i2c1 { /* SDA PB7, SCL PB6, ALERT PA7 */
-	sht3xd@44 {
-		compatible = "sensirion,sht3xd";
-		reg= <0x44>;
-    status = "okay";
-
-		alert-gpios = <&gpioa 7 GPIO_ACTIVE_HIGH>;
-	};
-};
-
-/* adc for voltage and current measurement */
-
-/{
-    adc_encoder: adc_encoder {
-        compatible = "gpio-encoder";
-        status = "okay";
-
-        gpios = <&gpioa 2  (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
-                <&gpioa 12 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
-                <&gpioa 11 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
-    };
-};
-
-&spi1 {
-  status = "okay";
-
-	clock-frequency = <1000000>;
-  cs-gpios = <&gpioa 8 GPIO_ACTIVE_LOW>; 
-
-  adc_ltc2450: ltc2450@0 {
-    compatible = "lltc,ltc2450";
-    reg = <0>;
-    status = "okay";
-
-		spi-max-frequency = <2000000>; // max: 2 MHz
-    duplex = <2048>; // half-duplex
-  };
-};
-
-/* enable 4 voltage channels (DAC) */
-&volt_ch0 {
-      status = "okay";
-};
-
-&volt_ch1 {
-      status = "okay";
-};
-
-&volt_ch2 {
-      status = "okay";
-};
-
-&volt_ch3 {
-      status = "okay";
-};
+// &usart3 {
+//   status = "okay";
+// };
