@@ -134,6 +134,7 @@ static int init_modbus_server(void) {
     printk("Failed to get iface index for %s", iface_name);
     return iface;
   }
+  printk("mb iface: %s\n", iface_name);
 
   return modbus_init_server(iface, server_param);
 }
@@ -144,6 +145,7 @@ int main(void) {
   k_work_init(&coil_cmd.work, coil_work_handler);
   k_work_init(&register_cmd.work, register_work_handler);
 
+  printk("mb server init\n");
   if (init_modbus_server()) {
     printk("Modbus RTU server initialization failed");
   }
