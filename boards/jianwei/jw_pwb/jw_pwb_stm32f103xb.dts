@@ -69,7 +69,7 @@
 	};
 };
 
-/* [todo] clocks: max sysclk allowed is 72 MHz */
+/* [todo] clocks: max cpu clock allowed is 72 MHz */
 
 /* uncomment it for RTC */
 // &clk_lsi {
@@ -94,17 +94,18 @@
 
 /* by default, PLL clock will be divided by 1.5 to get USB 48 MHz clock */
 &pll {
-	mul = <9>; // use 72 MHz
+	mul = <16>; // max is 64 MHz when use hsi source (8/2*16=64)
 	clocks = <&clk_hsi>; // [todo] use hse to enable USB port
 	status = "okay";
 };
 
 &rcc {
 	clocks = <&pll>;
-	clock-frequency = <DT_FREQ_M(72)>;
-	ahb-prescaler = <1>; // 72 MHz
-	apb1-prescaler = <2>; // max 36 MHz
-	apb2-prescaler = <1>; // 72 MHz
+	clock-frequency = <DT_FREQ_M(64)>; // for hsi clock source
+	// clock-frequency = <DT_FREQ_M(72)>; // for hse clock source
+	ahb-prescaler = <1>; // 72 MHz for hse, 64 MHz for hsi
+	apb1-prescaler = <2>; // max 36 MHz for hse, 32 MHz for hsi
+	apb2-prescaler = <1>; // 72 MHz for hse, 64 MHz for hsi
 };
 
 /* watchdog */
@@ -157,7 +158,8 @@
 	pinctrl-0 = <&spi2_nss_master_pb12 &spi2_sck_master_pb13
 		          &spi2_miso_master_pb14 &spi2_mosi_master_pb15>;
 	pinctrl-names = "default";
-	clock-frequency = <1125000>; // limit it to 1.25 MHz (36 MHz/32)
+	// clock-frequency = <1125000>; // for hse clock, limit it to 1.25 MHz (36 MHz/32)
+	clock-frequency = <1000000>; // for hsi clock, limit it to 1MHz (32 MHz/32)
 	status = "okay";
 
 	cs-gpios = <&gpiob 12 GPIO_ACTIVE_HIGH>;
@@ -176,7 +178,8 @@
 	pinctrl-0 = <&spi1_nss_master_pa4 &spi1_sck_master_pa5
 		          &spi1_miso_master_pa6 &spi1_mosi_master_pa7>;
 	pinctrl-names = "default";
-	clock-frequency = <9000000>; // limit it to 9 MHz (72 MHz/8)
+	clock-frequency = <8000000>; // limit it to 8 MHz for hsi (64 MHz/8)
+	// clock-frequency = <9000000>; // limit it to 9 MHz for hse (72 MHz/8)
 	status = "okay";
 
   cs-gpios = <&gpioa 4 GPIO_ACTIVE_LOW>,
@@ -237,6 +240,16 @@
 
 		alert-gpios = <&gpioa 0 GPIO_ACTIVE_HIGH>;
 	};
+};
+
+/* - heartbeat led */
+/{
+  leds {
+ 		compatible = "gpio-leds";
+ 		hb_led: hb_led {
+ 			gpios = <&gpioa 15 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH) >;
+    };
+  };
 };
 
 /* expansion port (i.e. labelled uart3 port in PCB design */
