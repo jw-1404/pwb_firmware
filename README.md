@@ -7,7 +7,7 @@
 ## initialization
 
 ```shell
-west init -m <git_url> <your_workspace>
+west init -m <git_url> --mr v3-dev <your_workspace>
 cd <your_workspace>`
 west update
 ```
@@ -21,7 +21,11 @@ For PCB-v3:
 
 ## flashing (linux)
 
+### use native bootloader and uart1
 `sudo stm32flash -w <path/to/zephyr.hex> -g 0x0 -v </path/to/tty/device>`
+
+### use SWD port and J-Link debug probe
+`west flash -d build -r jlink`
 
 ## check memory footprint
 
