@@ -4,6 +4,9 @@ CONFIG_SERIAL=y
 CONFIG_CONSOLE=y
 CONFIG_UART_CONSOLE=y
 
+# needed by modbus implementation
+CONFIG_UART_INTERRUPT_DRIVEN=y
+
 # GPIO Controller
 CONFIG_GPIO=y
 

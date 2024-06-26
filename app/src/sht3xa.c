@@ -21,7 +21,6 @@ static void sht3xa_poll()
   holding_reg[REG_HUMIDITY_INT]->value = hum.val1 & BIT_MASK(16);
   holding_reg[REG_HUMIDITY_FLT]->value = hum.val2 & BIT_MASK(16); // = flt/1000000
 
-  printk("new sensor value %d\n", temp.val1);
   return;
 }
 

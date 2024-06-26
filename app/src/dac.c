@@ -16,9 +16,6 @@ static const struct device *dac_dev[DAC_NUM];
 #define SWITCH_ONOFF_VOLTAGE(id)                                               \
   if (coil_reg[COIL_TRIPPED_CH##id]->value)                                    \
     return;                                                                    \
-  coil_reg[COIL_ONOFF_CH##id]->value=1;                                 \
-  holding_reg[REG_SVV_CH##id]->value=0x4fff;                            \
-  printk("switch on ch ##id: %x\n", holding_reg[REG_SVV_CH##id]->value); \
   if (coil_reg[COIL_ONOFF_CH##id]->value)                                      \
     dac_write_value(dac_dev[id], 0, holding_reg[REG_SVV_CH##id]->value);       \
   else                                                                         \
@@ -81,8 +78,7 @@ HOLDING_REG_HANDLER_DEFINE(dac_holding_reg, dac_holding_register_handler);
            "check the driver initialization logs for errors.\n",               \
            dac_dev[index]->name);                                              \
     return -ENOENT;                                                            \
-  }                                                                     \
-  SWITCH_ONOFF_VOLTAGE(index);                                          
+  }
 
 
 static int dac_init(void) {
