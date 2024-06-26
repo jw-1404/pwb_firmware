@@ -16,8 +16,18 @@
 		zephyr,code-partition = &code_partition;
 	};
 
+  /* heartbeat indicator */
+  leds {
+ 		compatible = "gpio-leds";
+ 		hb_led: hb_led {
+ 			gpios = <&gpioa 15 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH) >;
+      label = "HB";
+    };
+  };
+
   aliases {
 		watchdog0 = &iwdg;
+    led0 = &hb_led;
 	};
 };
 
@@ -88,9 +98,10 @@
 // 	status = "okay";
 // };
 
-&clk_lsi {
-	status = "okay";
-};
+/* [todo] RTC need lsi */
+// &clk_lsi {
+// 	status = "okay";
+// };
 
 &clk_hsi {
   status = "okay";
@@ -118,9 +129,9 @@
 };
 
 // [todo] needed?
-&dma1 {
-	status = "okay";
-};
+// &dma1 {
+// 	status = "okay";
+// };
 
 /* communication: */
 
@@ -136,7 +147,7 @@
 &usart2 {
 	pinctrl-0 = <&usart2_tx_pa2 &usart2_rx_pa3>;
 	pinctrl-names = "default";
-	current-speed = <115200>; // [todo] needed?
+	current-speed = <115200>;
 	status = "okay";
 
 	modbus0 {
@@ -160,7 +171,7 @@
 /* - adc for V/I measuremet */
 &spi2 {
 	pinctrl-0 = <&spi2_nss_master_pb12 &spi2_sck_master_pb13
-		          &spi2_miso_master_pb14 &spi2_mosi_master_pb15>;
+		           &spi2_miso_master_pb14 &spi2_mosi_master_pb15>;
 	pinctrl-names = "default";
 	// clock-frequency = <1125000>; // for hse clock, limit it to 1.25 MHz (36 MHz/32)
 	clock-frequency = <1000000>; // for hsi clock, limit it to 1MHz (32 MHz/32)
@@ -246,27 +257,22 @@
 	};
 };
 
-/* - heartbeat led */
-/{
-  leds {
- 		compatible = "gpio-leds";
- 		hb_led: hb_led {
- 			gpios = <&gpioa 15 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH) >;
-    };
-  };
-};
+/* expansion port (labelled uart3 port in PCB design, but optionally used as I2C) */
 
-/* expansion port (i.e. labelled uart3 port in PCB design */
-// &i2c2 {
-// 	pinctrl-0 = <&i2c2_scl_pb10 &i2c2_sda_pb11>;
-// 	pinctrl-names = "default";
-// 	clock-frequency = <I2C_BITRATE_FAST>;
-// };
-
+// - PA10 and PA11 default is usart
 &usart3 {
 	pinctrl-0 = <&usart3_tx_pb10 &usart3_rx_pb11>;
 	pinctrl-names = "default";
 	current-speed = <115200>;
+  status = "okay";
+};
+
+// - optionally can be used as i2c
+&i2c2 {
+	pinctrl-0 = <&i2c2_scl_pb10 &i2c2_sda_pb11>;
+	pinctrl-names = "default";
+	clock-frequency = <I2C_BITRATE_FAST>;
+  status = "disabled";
 };
 
 /* [todo] usb port (must have valid hse clock) */
@@ -274,5 +280,4 @@ zephyr_udc0: &usb {
 	pinctrl-0 = <&usb_dm_pa11 &usb_dp_pa12>;
 	pinctrl-names = "default";
   status = "disabled";
-	// disconnect-gpios = <&gpioc 11 GPIO_ACTIVE_LOW>;
 };

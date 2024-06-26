@@ -65,7 +65,7 @@ inline static void read_adc_ch(int ch) {
 
   // update corresponding regs
   holding_reg[measure_ch_map[ch]]->value = buf;
-  printk("new adc meaure (ch%d): %d\n", ch, buf);
+  /* printk("new adc meaure (ch%d): %d\n", ch, buf); */
 
   return;
 }

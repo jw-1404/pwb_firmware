@@ -10,10 +10,10 @@
 # Copyright (c) 2024 Yong Zhou
 # SPDX-License-Identifier: Apache-2.0
 
-config DS18S20
-	bool "DS18S20 Temperature Sensor"
+config JW_DS18S20
+	bool "DS18S20 Temperature Sensor with custom driver"
 	default y
-	depends on DT_HAS_MAXIM_DS18S20_ENABLED
+	depends on DT_HAS_JW_DS18S20_ENABLED
 	depends on W1_NET
 	help
 	  Enable driver for DS18S20 1-Wire temperature sensors.

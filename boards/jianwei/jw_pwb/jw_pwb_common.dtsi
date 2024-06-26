@@ -11,7 +11,7 @@
     status = "disabled";
 
     uuid_device: uuid_device {
-      compatible = "maxim,ds18s20";
+      compatible = "jw,ds18s20";
 	    family-code = <0x10>;
 	    status = "okay";
     };

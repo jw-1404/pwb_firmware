@@ -1,4 +1,4 @@
-#ifdef CONFIG_DS18S20
+#ifdef CONFIG_JW_DS18S20
 
 #include "common.h"
 
@@ -8,7 +8,7 @@
 #include <zephyr/drivers/sensor/w1_sensor.h>
 #include <zephyr/sys/util.h>
 
-#define DS18S20_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(maxim_ds18s20)
+#define DS18S20_NODE DT_COMPAT_GET_ANY_STATUS_OKAY(jw_ds18s20)
 static const struct device *dev;
 
 //

@@ -11,10 +11,12 @@ manifest:
   projects:
     - name: zephyr
       remote: zephyrproject-rtos
-      revision: main
+      revision: v3.7.0-rc1
       import:
         # By using name-allowlist we can clone only the modules that are
         # strictly needed by the application.
         name-allowlist:
+          - mcuboot
           - cmsis      # required by the ARM port
           - hal_stm32  # required by the jw_pwb board (STM32 based)
+          - segger     # required by RTT viewer

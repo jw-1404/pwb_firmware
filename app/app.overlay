@@ -4,7 +4,3 @@
 // 		zephyr,shell-uart = &usart3;
 //   };
 // };
-
-// &usart3 {
-//   status = "okay";
-// };

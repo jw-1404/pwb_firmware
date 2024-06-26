@@ -2,8 +2,8 @@
 # Copyright (c) 2021, Yong Zhou
 # SPDX-License-Identifier: Apache-2.0
 
-description: Maxim DS18S20 1-Wire temperature sensor
+description: JianWei's custom maxim DS18S20 1-Wire temperature sensor
 
-compatible: "maxim,ds18s20"
+compatible: "jw,ds18s20"
 
 include: [sensor-device.yaml, w1-slave.yaml]

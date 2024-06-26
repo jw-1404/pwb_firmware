@@ -12,7 +12,7 @@
  *
  * Parasite power configuration is not supported by the driver.
  */
-#define DT_DRV_COMPAT maxim_ds18s20
+#define DT_DRV_COMPAT jw_ds18s20
 
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/drivers/sensor/w1_sensor.h>
