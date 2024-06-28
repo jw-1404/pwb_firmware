@@ -123,6 +123,11 @@
 	apb2-prescaler = <1>; // 72 MHz for hse, 64 MHz for hsi
 };
 
+/* disable jtag-dp to release PA15, PB3 and PB4 */
+&pinctrl {
+  swj-cfg = "jtag-disable";
+};
+
 /* watchdog */
 &iwdg {
 	status = "okay";
