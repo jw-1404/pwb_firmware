@@ -182,7 +182,7 @@
 	clock-frequency = <1000000>; // for hsi clock, limit it to 1MHz (32 MHz/32)
 	status = "okay";
 
-	cs-gpios = <&gpiob 12 GPIO_ACTIVE_HIGH>;
+	cs-gpios = <&gpiob 12 GPIO_ACTIVE_LOW>;
   ltc2450@0 {
     compatible = "lltc,ltc2450";
     reg = <0>;
