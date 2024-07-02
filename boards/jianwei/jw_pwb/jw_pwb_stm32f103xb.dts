@@ -175,8 +175,7 @@
 
 /* - adc for V/I measuremet */
 &spi2 {
-	pinctrl-0 = <&spi2_nss_master_pb12 &spi2_sck_master_pb13
-		           &spi2_miso_master_pb14 &spi2_mosi_master_pb15>;
+	pinctrl-0 = <&spi2_sck_master_pb13 &spi2_miso_master_pb14>;
 	pinctrl-names = "default";
 	// clock-frequency = <1125000>; // for hse clock, limit it to 1.25 MHz (36 MHz/32)
 	clock-frequency = <1000000>; // for hsi clock, limit it to 1MHz (32 MHz/32)
@@ -195,8 +194,7 @@
 
 /* - dac  for V set */
 &spi1 {
-	pinctrl-0 = <&spi1_nss_master_pa4 &spi1_sck_master_pa5
-		          &spi1_miso_master_pa6 &spi1_mosi_master_pa7>;
+	pinctrl-0 = <&spi1_sck_master_pa5 &spi1_mosi_master_pa7>;
 	pinctrl-names = "default";
 	clock-frequency = <8000000>; // limit it to 8 MHz for hsi (64 MHz/8)
 	// clock-frequency = <9000000>; // limit it to 9 MHz for hse (72 MHz/8)
