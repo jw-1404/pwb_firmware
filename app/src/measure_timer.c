@@ -23,8 +23,8 @@
 
 /* hardcoded mapping from encoder ch to internal register addr (fixed in PCB design) */
 const static uint16_t measure_ch_map[] = {REG_PVV_CH0, REG_PVI_CH0, REG_PVV_CH1,
-                                          REG_PVI_CH1, REG_PVI_CH2, REG_PVI_CH3,
-                                          REG_PVV_CH3, REG_PVV_CH2};
+                                          REG_PVI_CH1, REG_PVI_CH3, REG_PVV_CH3,
+                                          REG_PVI_CH2, REG_PVV_CH2};
 
 /* set the current adc channel */
 const static struct gpio_dt_spec encoder_gpio[] = {
