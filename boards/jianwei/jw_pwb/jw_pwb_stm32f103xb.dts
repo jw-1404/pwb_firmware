@@ -168,9 +168,9 @@
 /* - ch encoder for adc measurmeant */
 &adc_encoder {
   status = "okay";
-  gpios = <&gpiob 0  (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
-          <&gpiob 2  (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
-          <&gpiob 1  (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
+  gpios = <&gpioa 6  (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
+          <&gpiob 1  (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>,
+          <&gpiob 0  (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
 };
 
 /* - adc for V/I measuremet */
