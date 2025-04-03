@@ -1,0 +1,91 @@
+/dts-v1/;
+
+#include <st/f1/stm32f103Xe.dtsi>
+#include <st/f1/stm32f103z(c-d-e)tx-pinctrl.dtsi>
+
+/{
+	model = "Jianwei Low-Voltage Supply Board";
+	compatible = "jw,lvb";
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+	};
+
+	powers {
+		compatible = "gpio-leds";
+		pwr_1: pwr_1 {
+			gpios = <&gpiog 1 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
+			label = "Switch CH1";
+		};
+		pwr_2: pwr_2 {
+			gpios = <&gpioe 8 GPIO_ACTIVE_HIGH>;
+			label = "Switch CH2";
+		};
+		pwr_3: pwr_3 {
+			gpios = <&gpiof 14 GPIO_ACTIVE_HIGH>;
+			label = "Switch CH3";
+		};
+	};
+
+	aliases {
+		watchdog0 = &iwdg;
+
+		pwr1 = &pwr_1;
+		pwr2 = &pwr_2;
+		pwr3 = &pwr_3;
+	};
+};
+
+/* clocks: max cpu clock allowed is 72 MHz */
+
+&clk_hse {
+	clock-frequency = <DT_FREQ_M(8)>;
+ 	status = "okay";
+};
+
+&pll {
+	mul = <9>;
+	clocks = <&clk_hse>; 
+	status = "okay";
+};
+
+&rcc {
+	clocks = <&pll>;
+	clock-frequency = <DT_FREQ_M(72)>;
+	ahb-prescaler = <1>; // 72 MHz for hse, 64 MHz for hsi
+	apb1-prescaler = <2>; // max 36 MHz for hse, 32 MHz for hsi
+	apb2-prescaler = <1>; // 72 MHz for hse, 64 MHz for hsi
+};
+
+/* watchdog */
+&iwdg {
+	status = "okay";
+};
+
+/* disable jtag-dp to release PA15, PB3 and PB4 */
+// &pinctrl {
+//  swj-cfg = "jtag-disable";
+//};
+
+
+/* communication: */
+
+/* - uart1 for modbus */
+&usart1 {
+	pinctrl-0 = <&usart1_tx_pa9 &usart1_rx_pa10>;
+	pinctrl-names = "default";
+	current-speed = <115200>;
+	status = "okay";
+
+	modbus0 {
+		compatible = "zephyr,modbus-serial";
+		status = "okay";
+
+		de-gpios = <&gpiog 3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+	};
+};
+
+/* peripherals: */
+
+

@@ -1,0 +1,7 @@
+
+if BOARD_JW_LVB
+
+config BOARD
+	default "jw_lvb"
+
+endif # BOARD_JW_LVB
