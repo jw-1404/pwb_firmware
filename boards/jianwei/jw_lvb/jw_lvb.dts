@@ -12,28 +12,65 @@
 		zephyr,flash = &flash0;
 	};
 
+  
+  /* use gpio-leds dts to emulate power switch behavior */
 	powers {
 		compatible = "gpio-leds";
+		pwr_0: pwr_0 { // always-on channel
+			gpios = <&gpiog 1 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH1";
+		};
 		pwr_1: pwr_1 {
-			gpios = <&gpiog 1 (GPIO_PULL_DOWN | GPIO_ACTIVE_HIGH)>;
-			label = "Switch CH1";
+			gpios = <&gpioe 8 GPIO_ACTIVE_HIGH>;
+			label = "Power-CH2";
 		};
 		pwr_2: pwr_2 {
-			gpios = <&gpioe 8 GPIO_ACTIVE_HIGH>;
-			label = "Switch CH2";
+			gpios = <&gpiof 14 GPIO_ACTIVE_HIGH>;
+			label = "Power-CH3";
 		};
 		pwr_3: pwr_3 {
-			gpios = <&gpiof 14 GPIO_ACTIVE_HIGH>;
-			label = "Switch CH3";
+			gpios = <&gpioe 11 GPIO_ACTIVE_HIGH>;
+			label = "Power-CH4";
+		};
+		pwr_4: pwr_4 {
+			gpios = <&gpioe 6 GPIO_ACTIVE_HIGH>;
+			label = "Power-CH5";
+		};
+		pwr_5: pwr_5 {
+			gpios = <&gpioa 12 GPIO_ACTIVE_HIGH>;
+			label = "Power-CH6";
+		};
+		pwr_6: pwr_6 {
+			gpios = <&gpioe 5 GPIO_ACTIVE_HIGH>;
+			label = "Power-CH7";
+		};
+		pwr_7: pwr_7 {
+			gpios = <&gpioe 2 GPIO_ACTIVE_HIGH>;
+			label = "Power-CH8";
+		};
+		pwr_8: pwr_8 {
+			gpios = <&gpioe 4 GPIO_ACTIVE_HIGH>;
+			label = "Power-CH9";
+		};
+		pwr_9: pwr_9 {
+			gpios = <&gpioe 3 GPIO_ACTIVE_HIGH>;
+			label = "Power-CH10";
 		};
 	};
 
 	aliases {
 		watchdog0 = &iwdg;
 
+		pwr0 = &pwr_0;
 		pwr1 = &pwr_1;
 		pwr2 = &pwr_2;
 		pwr3 = &pwr_3;
+		pwr4 = &pwr_4;
+		pwr5 = &pwr_5;
+		pwr6 = &pwr_6;
+		pwr7 = &pwr_7;
+		pwr8 = &pwr_8;
+		pwr9 = &pwr_9;
 	};
 };
 
