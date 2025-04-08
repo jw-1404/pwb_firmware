@@ -27,7 +27,7 @@
 #define REG_PVI_CH9 19
 
 // measuring interval (in ms)
-#define REG_MEASURE_INTERVAL 100
+#define REG_MEASURE_INTERVAL 20
 
 // system alive time (high-16 bits & low-16 bits)
 #define REG_HEARTBEAT_LW 21

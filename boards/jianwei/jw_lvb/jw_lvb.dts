@@ -12,52 +12,15 @@
 		zephyr,flash = &flash0;
 	};
 
-  
-  /* use gpio-leds dts to emulate power switch behavior */
-	powers {
-		compatible = "gpio-leds";
-		pwr_0: pwr_0 { // always-on channel
-			gpios = <&gpiog 1 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
-			label = "Power-CH1";
-		};
-		pwr_1: pwr_1 {
-			gpios = <&gpioe 8 GPIO_ACTIVE_HIGH>;
-			label = "Power-CH2";
-		};
-		pwr_2: pwr_2 {
-			gpios = <&gpiof 14 GPIO_ACTIVE_HIGH>;
-			label = "Power-CH3";
-		};
-		pwr_3: pwr_3 {
-			gpios = <&gpioe 11 GPIO_ACTIVE_HIGH>;
-			label = "Power-CH4";
-		};
-		pwr_4: pwr_4 {
-			gpios = <&gpioe 6 GPIO_ACTIVE_HIGH>;
-			label = "Power-CH5";
-		};
-		pwr_5: pwr_5 {
-			gpios = <&gpioa 12 GPIO_ACTIVE_HIGH>;
-			label = "Power-CH6";
-		};
-		pwr_6: pwr_6 {
-			gpios = <&gpioe 5 GPIO_ACTIVE_HIGH>;
-			label = "Power-CH7";
-		};
-		pwr_7: pwr_7 {
-			gpios = <&gpioe 2 GPIO_ACTIVE_HIGH>;
-			label = "Power-CH8";
-		};
-		pwr_8: pwr_8 {
-			gpios = <&gpioe 4 GPIO_ACTIVE_HIGH>;
-			label = "Power-CH9";
-		};
-		pwr_9: pwr_9 {
-			gpios = <&gpioe 3 GPIO_ACTIVE_HIGH>;
-			label = "Power-CH10";
-		};
+  /* V/I measurement channels: index is channel id, 0-9 for voltage, 10-19 for current */
+	zephyr,user {
+		io-channels = <&adc1 7>, <&adc1 15>, <&adc1 5>, <&adc1 8>, <&adc1 11>,
+                  <&adc1 3>, <&adc3 4>,  <&adc1 1>, <&adc3 6>, <&adc1 12>,
+		              <&adc1 6>, <&adc1 14>, <&adc1 4>, <&adc1 9>, <&adc1 10>,
+                  <&adc1 2>, <&adc3 5>,  <&adc1 13>,<&adc3 7>, <&adc3 8>;
 	};
 
+ /* power switch channels */
 	aliases {
 		watchdog0 = &iwdg;
 
@@ -72,6 +35,61 @@
 		pwr8 = &pwr_8;
 		pwr9 = &pwr_9;
 	};
+  
+  /* use gpio-leds dts to emulate power switch behavior */
+	powers {
+		compatible = "gpio-leds";
+		pwr_0: pwr_0 { // always-on channel
+			gpios = <&gpiog 1 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH1";
+		};
+		pwr_1: pwr_1 {
+			// gpios = <&gpioe 8 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioe 8 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH2";
+		};
+		pwr_2: pwr_2 {
+			// gpios = <&gpiof 14 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpiof 14 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH3";
+		};
+		pwr_3: pwr_3 {
+			// gpios = <&gpioe 11 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioe 11 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH4";
+		};
+		pwr_4: pwr_4 {
+			// gpios = <&gpioe 6  GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioe 6 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH5";
+		};
+		pwr_5: pwr_5 {
+			// gpios = <&gpioa 12 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioa 12 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH6";
+		};
+		pwr_6: pwr_6 {
+			// gpios = <&gpioe 5 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioe 5 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH7";
+		};
+		pwr_7: pwr_7 {
+			// gpios = <&gpioe 2 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioe 2 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH8";
+		};
+		pwr_8: pwr_8 {
+			// gpios = <&gpioe 4 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioe 4 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH9";
+		};
+		pwr_9: pwr_9 {
+			// gpios = <&gpioe 3 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpioe 3 (GPIO_PULL_UP | GPIO_ACTIVE_HIGH)>;
+			label = "Power-CH10";
+		};
+	};
+
 };
 
 /* clocks: max cpu clock allowed is 72 MHz */
@@ -123,6 +141,139 @@
 	};
 };
 
-/* peripherals: */
+/* dt adc channels: migrated from google_twinkie_v2 */
+&adc1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
 
+	pinctrl-0 = <&adc1_in7_pa7	// V1
+          	   &adc1_in15_pc5	// V2
+          	   &adc1_in5_pa5	// V3
+          	   &adc1_in8_pb0	// V4
+          	   &adc1_in11_pc1	// V5
+          	   &adc1_in3_pa3	// V6
+          	   &adc1_in1_pa1	// V8
+          	   &adc1_in12_pc2	// V10
+
+          	   &adc1_in6_pa6	// I1
+          	   &adc1_in14_pc4	// I2
+          	   &adc1_in4_pa4	// I3
+          	   &adc1_in9_pb1	// I4
+          	   &adc1_in10_pc0	// I5
+          	   &adc1_in2_pa2	// I6
+          	   &adc1_in13_pc3	// I8
+		          >;
+	pinctrl-names = "default";
+	status = "okay";
+
+	channel@7 {
+		reg = <7>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@f {
+		reg = <15>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@5 {
+		reg = <5>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@8 {
+		reg = <8>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@b {
+		reg = <11>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@3 {
+		reg = <3>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@1 {
+		reg = <1>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@c {
+		reg = <12>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+};
+
+// &adc2 {};
+
+&adc3 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	pinctrl-0 = <&adc3_in4_pf6	// V7
+               &adc3_in6_pf8  // V9
+
+          	   &adc3_in5_pf7	// I7
+          	   &adc3_in7_pf9	// I9
+          	   &adc3_in8_pf10 // I10
+		          >;
+	pinctrl-names = "default";
+	status = "okay";
+
+	channel@4 {
+		reg = <4>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@6 {
+		reg = <6>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@5 {
+		reg = <5>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@7 {
+		reg = <7>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+	channel@8 {
+		reg = <8>;
+		zephyr,gain = "ADC_GAIN_1";
+		zephyr,reference = "ADC_REF_INTERNAL";
+		zephyr,acquisition-time = <ADC_ACQ_TIME_DEFAULT>;
+		zephyr,resolution = <12>;
+	};
+};
 
