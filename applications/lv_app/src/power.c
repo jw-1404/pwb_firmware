@@ -101,6 +101,17 @@ static int power_init(void) {
     return -ENOENT;
   }
 
+	gpio_pin_configure_dt(&pwr0, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr1, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr2, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr3, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr4, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr5, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr6, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr7, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr8, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr9, GPIO_OUTPUT_ACTIVE);
+
   return 0;
 }
 
