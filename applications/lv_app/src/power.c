@@ -27,7 +27,7 @@ static const struct gpio_dt_spec pwr9 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr9), gpios);
 
 static void power_coil_register_handler(uint8_t addr) {
   switch (addr) {
-    // channel-1: always on
+    // no effect on CH0, it's always on
   /* case COIL_ONOFF_CH0: */
   /*   gpio_pin_configure_dt(&pwr0, coil_reg[COIL_ONOFF_CH0]->value */
   /*                         ? GPIO_OUTPUT_ACTIVE */
@@ -101,18 +101,18 @@ static int power_init(void) {
     return -ENOENT;
   }
 
-	gpio_pin_configure_dt(&pwr0, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure_dt(&pwr1, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure_dt(&pwr2, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure_dt(&pwr3, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure_dt(&pwr4, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure_dt(&pwr5, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure_dt(&pwr6, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure_dt(&pwr7, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure_dt(&pwr8, GPIO_OUTPUT_ACTIVE);
-	gpio_pin_configure_dt(&pwr9, GPIO_OUTPUT_ACTIVE);
+	gpio_pin_configure_dt(&pwr0, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH0]->value = true;
+	gpio_pin_configure_dt(&pwr1, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH1]->value = true;
+	gpio_pin_configure_dt(&pwr2, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH2]->value = true;
+	gpio_pin_configure_dt(&pwr3, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH3]->value = true;
+	gpio_pin_configure_dt(&pwr4, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH4]->value = true;
+	gpio_pin_configure_dt(&pwr5, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH5]->value = true;
+	gpio_pin_configure_dt(&pwr6, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH6]->value = true;
+	gpio_pin_configure_dt(&pwr7, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH7]->value = true;
+	gpio_pin_configure_dt(&pwr8, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH8]->value = true;
+	gpio_pin_configure_dt(&pwr9, GPIO_OUTPUT_ACTIVE); coil_reg[COIL_ONOFF_CH9]->value = true;
 
   return 0;
 }
 
-SYS_INIT(power_init, POST_KERNEL, CONFIG_APPLICATION_INIT_PRIORITY);
+SYS_INIT(power_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
