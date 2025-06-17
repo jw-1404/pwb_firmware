@@ -14,9 +14,9 @@
 /* #endif */
 
 /* try: DT_FOREACH_PROP_ELEM in combination with GPIO_DT_SPEC_GET_BY_IDX; propery name customizable */
-static const struct gpio_dt_spec pwr0 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr0), gpios);
+static const struct gpio_dt_spec pwr0 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr2), gpios); // [bug]: ch1 and ch3 swaped
 static const struct gpio_dt_spec pwr1 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr1), gpios);
-static const struct gpio_dt_spec pwr2 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr2), gpios);
+static const struct gpio_dt_spec pwr2 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr0), gpios);
 static const struct gpio_dt_spec pwr3 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr3), gpios);
 static const struct gpio_dt_spec pwr4 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr4), gpios);
 static const struct gpio_dt_spec pwr5 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr5), gpios);
