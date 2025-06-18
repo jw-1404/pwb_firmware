@@ -6,7 +6,8 @@
 #include <zephyr/kernel.h>
 
 /* unit: ms */
-#define MEASUREMENT_PERIOD 2000
+#define MEASUREMENT_PERIOD 150
+#define MEASUREMENT_TIMEs 30
 
 #if !DT_NODE_EXISTS(DT_PATH(zephyr_user)) ||            \
   !DT_NODE_HAS_PROP(DT_PATH(zephyr_user), io_channels)
@@ -32,6 +33,13 @@ const static uint16_t current_ch_map[] = {REG_PVI_CH0, REG_PVI_CH1, REG_PVI_CH2,
                                           REG_PVI_CH3, REG_PVI_CH4, REG_PVI_CH5,
                                           REG_PVI_CH6, REG_PVI_CH7, REG_PVI_CH8,
                                           REG_PVI_CH9};
+// [todo] should be calibrated for each board
+const static uint16_t current_zero_offset[] = { 1822, 1682, 1640, 1730, 1715,
+                                                1707, 1812, 1717, 1670, 1662};
+
+static int32_t voltage_cache[ARRAY_SIZE(voltage_ch_map)];
+static int32_t current_cache[ARRAY_SIZE(current_ch_map)];
+static int32_t cache_counter = 0;
 
 // [todo] rtn err code?
 inline static void read_voltage() {
@@ -54,8 +62,15 @@ inline static void read_voltage() {
     // [todo] value conversion
 
     // update corresponding regs
-    holding_reg[voltage_ch_map[i]]->value = buf;
-    printk("voltage %d: %d\n", i + 1, buf);
+    if (cache_counter == (MEASUREMENT_TIMEs-1)) {
+      uint16_t tmp_cache = voltage_cache[i] / MEASUREMENT_TIMEs;
+      holding_reg[voltage_ch_map[i]]->value = 3300.0/4096*tmp_cache*5.6;
+      voltage_cache[i] = 0;
+      printk("voltage %d: %d\n", i + 1, holding_reg[voltage_ch_map[i]]->value);
+    }
+    else {
+      voltage_cache[i] += buf;
+    }
   }
 
   return;
@@ -80,18 +95,34 @@ inline static void read_current() {
     }
 
     // [todo] value conversion
-    int32_t val_mv = (int32_t)buf;
-    err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv);
-    /* conversion to mV may not be supported, skip if not */
-    if (err < 0) {
-      printk(" (value in mV not available)\n");
-    } else {
-      printk(" = %" PRId32 " mV\n", val_mv);
-    }
+    /* int32_t val_mv = (int32_t)buf; */
+    /* err = adc_raw_to_millivolts_dt(&adc_channels[i], &val_mv); */
+    /* /\* conversion to mV may not be supported, skip if not *\/ */
+    /* if (err < 0) { */
+    /*   printk(" (value in mV not available)\n"); */
+    /* } else { */
+    /*   printk(" = %" PRId32 " mV\n", val_mv); */
+    /* } */
 
     // update corresponding regs
-    holding_reg[current_ch_map[i - start_index]]->value = buf;
-    printk("current %d: %d\n", i + 1, buf);
+    if (cache_counter == (MEASUREMENT_TIMEs-1)) {
+      uint16_t tmp_cache = current_cache[i - start_index] / MEASUREMENT_TIMEs;
+      if (tmp_cache < current_zero_offset[i - start_index]){
+        tmp_cache = 0;
+      }
+      else {
+        tmp_cache -= current_zero_offset[i - start_index];
+      }
+
+      /* holding_reg[current_ch_map[i - start_index]]->value = tmp_cache*16.0 -
+       * 25000; */
+      holding_reg[current_ch_map[i - start_index]]->value = tmp_cache*16.0;
+      current_cache[i-start_index] = 0;
+      printk("current %d: %d\n", i + 1, holding_reg[current_ch_map[i-start_index]]->value);
+    }
+    else {
+      current_cache[i-start_index] += buf;
+    }
   }
 
   return;
@@ -99,8 +130,12 @@ inline static void read_current() {
 /* work handler for measurement timer */
 static void measure_work_handler(struct k_work *work) {
   read_current();
-
   read_voltage();
+
+  if(cache_counter == (MEASUREMENT_TIMEs-1))
+    cache_counter = 0;
+  else
+    cache_counter++;
 
   return;
 }
