@@ -27,11 +27,11 @@ static const struct gpio_dt_spec pwr9 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr9), gpios);
 
 static void power_coil_register_handler(uint8_t addr) {
   switch (addr) {
-  case COIL_ONOFF_CH0:
-    gpio_pin_configure_dt(&pwr0, coil_reg[COIL_ONOFF_CH0]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
+  /* case COIL_ONOFF_CH0: */
+  /*   gpio_pin_configure_dt(&pwr0, coil_reg[COIL_ONOFF_CH0]->value */
+  /*                         ? GPIO_OUTPUT_ACTIVE */
+  /*                         : GPIO_OUTPUT_INACTIVE); */
+  /*   break; */
   case COIL_ONOFF_CH1:
     gpio_pin_configure_dt(&pwr1, coil_reg[COIL_ONOFF_CH1]->value
                           ? GPIO_OUTPUT_ACTIVE
