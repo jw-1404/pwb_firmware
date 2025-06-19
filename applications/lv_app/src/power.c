@@ -27,57 +27,58 @@ static const struct gpio_dt_spec pwr9 = GPIO_DT_SPEC_GET(DT_ALIAS(pwr9), gpios);
 
 static void power_coil_register_handler(uint8_t addr) {
   switch (addr) {
-  /* case COIL_ONOFF_CH0: */
-  /*   gpio_pin_configure_dt(&pwr0, coil_reg[COIL_ONOFF_CH0]->value */
-  /*                         ? GPIO_OUTPUT_ACTIVE */
-  /*                         : GPIO_OUTPUT_INACTIVE); */
-  /*   break; */
-  case COIL_ONOFF_CH1:
-    gpio_pin_configure_dt(&pwr1, coil_reg[COIL_ONOFF_CH1]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
-  // CHno effect on CH0, it's always on
-  case COIL_ONOFF_CH2:
-    gpio_pin_configure_dt(&pwr2, coil_reg[COIL_ONOFF_CH2]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
-  case COIL_ONOFF_CH3:
-    gpio_pin_configure_dt(&pwr3, coil_reg[COIL_ONOFF_CH3]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
-  case COIL_ONOFF_CH4:
-    gpio_pin_configure_dt(&pwr4, coil_reg[COIL_ONOFF_CH4]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
-  case COIL_ONOFF_CH5:
-    gpio_pin_configure_dt(&pwr5, coil_reg[COIL_ONOFF_CH5]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
-  case COIL_ONOFF_CH6:
-    gpio_pin_configure_dt(&pwr6, coil_reg[COIL_ONOFF_CH6]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
-  case COIL_ONOFF_CH7:
-    gpio_pin_configure_dt(&pwr7, coil_reg[COIL_ONOFF_CH7]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
-  case COIL_ONOFF_CH8:
-    gpio_pin_configure_dt(&pwr8, coil_reg[COIL_ONOFF_CH8]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
-  case COIL_ONOFF_CH9:
-    gpio_pin_configure_dt(&pwr9, coil_reg[COIL_ONOFF_CH9]->value
-                          ? GPIO_OUTPUT_ACTIVE
-                          : GPIO_OUTPUT_INACTIVE);
-    break;
+    case COIL_ONOFF_CH0:
+      /* gpio_pin_configure_dt(&pwr0, coil_reg[COIL_ONOFF_CH0]->value */
+      /*                       ? GPIO_OUTPUT_ACTIVE */
+      /*                       : GPIO_OUTPUT_INACTIVE); */
+      coil_reg[COIL_ONOFF_CH0]->value = true;
+      break;
+    case COIL_ONOFF_CH1:
+      gpio_pin_configure_dt(&pwr1, coil_reg[COIL_ONOFF_CH1]->value
+                                       ? GPIO_OUTPUT_ACTIVE
+                                       : GPIO_OUTPUT_INACTIVE);
+      break;
+    // CHno effect on CH0, it's always on
+    case COIL_ONOFF_CH2:
+      gpio_pin_configure_dt(&pwr2, coil_reg[COIL_ONOFF_CH2]->value
+                                       ? GPIO_OUTPUT_ACTIVE
+                                       : GPIO_OUTPUT_INACTIVE);
+      break;
+    case COIL_ONOFF_CH3:
+      gpio_pin_configure_dt(&pwr3, coil_reg[COIL_ONOFF_CH3]->value
+                                       ? GPIO_OUTPUT_ACTIVE
+                                       : GPIO_OUTPUT_INACTIVE);
+      break;
+    case COIL_ONOFF_CH4:
+      gpio_pin_configure_dt(&pwr4, coil_reg[COIL_ONOFF_CH4]->value
+                                       ? GPIO_OUTPUT_ACTIVE
+                                       : GPIO_OUTPUT_INACTIVE);
+      break;
+    case COIL_ONOFF_CH5:
+      gpio_pin_configure_dt(&pwr5, coil_reg[COIL_ONOFF_CH5]->value
+                                       ? GPIO_OUTPUT_ACTIVE
+                                       : GPIO_OUTPUT_INACTIVE);
+      break;
+    case COIL_ONOFF_CH6:
+      gpio_pin_configure_dt(&pwr6, coil_reg[COIL_ONOFF_CH6]->value
+                                       ? GPIO_OUTPUT_ACTIVE
+                                       : GPIO_OUTPUT_INACTIVE);
+      break;
+    case COIL_ONOFF_CH7:
+      gpio_pin_configure_dt(&pwr7, coil_reg[COIL_ONOFF_CH7]->value
+                                       ? GPIO_OUTPUT_ACTIVE
+                                       : GPIO_OUTPUT_INACTIVE);
+      break;
+    case COIL_ONOFF_CH8:
+      gpio_pin_configure_dt(&pwr8, coil_reg[COIL_ONOFF_CH8]->value
+                                       ? GPIO_OUTPUT_ACTIVE
+                                       : GPIO_OUTPUT_INACTIVE);
+      break;
+    case COIL_ONOFF_CH9:
+      gpio_pin_configure_dt(&pwr9, coil_reg[COIL_ONOFF_CH9]->value
+                                       ? GPIO_OUTPUT_ACTIVE
+                                       : GPIO_OUTPUT_INACTIVE);
+      break;
   }
 
   return;
