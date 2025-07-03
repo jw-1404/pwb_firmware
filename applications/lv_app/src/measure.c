@@ -64,7 +64,7 @@ inline static void read_voltage() {
     // update corresponding regs
     if (cache_counter == (MEASUREMENT_TIMEs-1)) {
       uint16_t tmp_cache = voltage_cache[i] / MEASUREMENT_TIMEs;
-      if (i<6) {
+      if (i<5) {
         holding_reg[voltage_ch_map[i]]->value = 3300.0 / 4096 * tmp_cache * 5.6;
       }
       else
